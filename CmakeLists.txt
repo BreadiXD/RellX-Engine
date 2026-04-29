@@ -6,6 +6,23 @@ set(CMAKE_C_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+# Librarys
+# SDL3
+set(SDL3_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/SDL3-3.4.4")
+set(SDL_SHARED OFF CACHE BOOL "Dont Build Shared SDL3" FORCE)
+set(SDL_STATIC ON CACHE BOOL "Build Static SDL3" FORCE)
+
+set(SDL_GPU OFF CACHE BOOL "Stop SDL_GPU" FORCE)
+set(SDL_RENDER_GPU OFF CACHE BOOL "Stop SDL_RENDER_GPU" FORCE)
+set(SDL_RENDER OFF CACHE BOOL "Stop SDL_RENDER" FORCE)
+set(SDL_CAMERA OFF CACHE BOOL "Stop SDL_CAMERA" FORCE)
+set(SDL_SENSOR OFF CACHE BOOL "Stop SDL_SENSOR" FORCE)
+
+add_subdirectory(${SDL3_PATH})
+
+
+
+
 # Output Path
 set(BIN_PATH "${CMAKE_CURRENT_SOURCE_DIR}/bin")
 if(NOT EXISTS "${BIN_PATH}")
@@ -13,3 +30,11 @@ if(NOT EXISTS "${BIN_PATH}")
 endif()
 set(EXECUTABLE_OUTPUT_PATH "${BIN_PATH}")
 add_executable(${PROJECT_NAME} main.cpp)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE 
+    SDL3-static
+)
+target_include_directories(${PROJECT_NAME} PRIVATE 
+    "${SDL3_PATH}/include"
+)
+target_link_options(${PROJECT_NAME} PRIVATE -static -static-libgcc)
