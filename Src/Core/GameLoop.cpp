@@ -24,7 +24,7 @@ namespace Rellx{
         displayServer.CleanUp();
         RELLX_LOG("GameLoop CleanUp Completed!")
     };
-    void Rellx::GameLoop::Quite(){
+    void Rellx::GameLoop::Quit(){
         RELLX_LOG("GameLoop Quite!!")
         running = false;
     };

@@ -15,12 +15,12 @@ namespace Rellx{
                 void Initalize(); // Initalize Function
                 void Update(); // Update Function
                 void CleanUp(); // CleanUp
-                Rellx::Servers::WindowInstance *Window_CreateWindowInstance(); // Create A Window Instance
-                void Window_DestroyWindowInstance(Rellx::Servers::WindowInstance* instance); // Destroy Window Instance
-                void Window_SetWindowSize(Rellx::Servers::WindowInstance* instance,const Rellx::Variants::Vector2i& size); // Change Window Size
-                Rellx::Variants::Vector2i Window_GetWindowSize(Rellx::Servers::WindowInstance* instance) const; // Get Window Size
-                void Window_SpwanWindow(Rellx::Servers::WindowInstance* instance); // Create Window
-                bool Window_WindowShouldClose(Rellx::Servers::WindowInstance* instance) const;
+                Rellx::Servers::WindowInstance *CreateWindowInstance(); // Create A Window Instance
+                void DestroyWindowInstance(Rellx::Servers::WindowInstance* instance); // Destroy Window Instance
+                void SetWindowSize(Rellx::Servers::WindowInstance* instance,const Rellx::Variants::Vector2i& size); // Change Window Size
+                Rellx::Variants::Vector2i GetWindowSize(Rellx::Servers::WindowInstance* instance) const; // Get Window Size
+                void SpawnWindow(Rellx::Servers::WindowInstance* instance); // Create Window
+                bool WindowShouldClose(Rellx::Servers::WindowInstance* instance) const;
         };
     };
 };

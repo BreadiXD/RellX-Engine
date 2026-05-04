@@ -1,7 +1,6 @@
 #include "Servers/DisplayServer.hpp"
 #include "Core/Utility.hpp"
 #include "SDL3/SDL.h"
-#include "iostream"
 namespace Rellx{
     namespace Servers{
         struct WindowInstance{
@@ -41,13 +40,13 @@ namespace Rellx{
         void Rellx::Servers::DisplayServer::CleanUp(){
             RELLX_LOG("Display Server CleanUp...")
             for (Rellx::Types::Int32 i = 0; i < MAX_WINDOWS; i++){
-                if (windows[i]) Window_DestroyWindowInstance(windows[i]);
+                if (windows[i]) DestroyWindowInstance(windows[i]);
             };
             Rellx::Memory::Delete(data);
             SDL_QuitSubSystem(SDL_INIT_VIDEO);
             RELLX_LOG("Display Server CleanUp Completed!")
         };
-        Rellx::Servers::WindowInstance* Rellx::Servers::DisplayServer::Window_CreateWindowInstance(){
+        Rellx::Servers::WindowInstance* Rellx::Servers::DisplayServer::CreateWindowInstance(){
             Rellx::Servers::WindowInstance* ptr;
             for (Rellx::Types::Int32 i = 0; i < MAX_WINDOWS; i++){
                 if (windows[i])continue;
@@ -64,22 +63,22 @@ namespace Rellx{
             };
             return ptr;
         };
-        void Rellx::Servers::DisplayServer::Window_DestroyWindowInstance(Rellx::Servers::WindowInstance* instance){
+        void Rellx::Servers::DisplayServer::DestroyWindowInstance(Rellx::Servers::WindowInstance* instance){
             if (instance){
                 if (instance->window)SDL_DestroyWindow(instance->window);
                 windows[instance->ID] = nullptr;
                 Rellx::Memory::Delete(instance);
             };
         };
-        void Rellx::Servers::DisplayServer::Window_SetWindowSize(Rellx::Servers::WindowInstance* instance,const Rellx::Variants::Vector2i& size){
+        void Rellx::Servers::DisplayServer::SetWindowSize(Rellx::Servers::WindowInstance* instance,const Rellx::Variants::Vector2i& size){
             if (instance){
                 instance->size = size;
             };
         };
-        Rellx::Variants::Vector2i Rellx::Servers::DisplayServer::Window_GetWindowSize(Rellx::Servers::WindowInstance* instance) const {
+        Rellx::Variants::Vector2i Rellx::Servers::DisplayServer::GetWindowSize(Rellx::Servers::WindowInstance* instance) const {
             return instance->size;
         };
-        void Rellx::Servers::DisplayServer::Window_SpwanWindow(Rellx::Servers::WindowInstance* instance){
+        void Rellx::Servers::DisplayServer::SpawnWindow(Rellx::Servers::WindowInstance* instance){
             instance->window = SDL_CreateWindow("",instance->size.x,instance->size.y,0);
             if (instance->window){
                 instance->shouldClose = false;
@@ -89,7 +88,7 @@ namespace Rellx{
                 RELLX_LOG_ERROR(SDL_GetError())
             };
         };
-        bool Rellx::Servers::DisplayServer::Window_WindowShouldClose(Rellx::Servers::WindowInstance* instance) const {
+        bool Rellx::Servers::DisplayServer::WindowShouldClose(Rellx::Servers::WindowInstance* instance) const {
             return instance->shouldClose;
         };
     };

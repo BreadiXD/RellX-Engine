@@ -11,7 +11,7 @@ namespace Rellx{
 
 
 
-#ifdef RELLX_DEBUG_LOGING
+#ifdef RELLX_DEBUG_LOGGING
 #define RELLX_LOG(...) Rellx::Loging::Log(__VA_ARGS__);
 #define RELLX_LOG_ERROR(...) Rellx::Loging::Error(__VA_ARGS__);
 #else

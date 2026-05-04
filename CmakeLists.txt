@@ -31,16 +31,22 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH "${BIN_PATH}")
 
 
-file(GLOB_RECURSE SOURCES_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Src/*.cpp")
-file(GLOB_RECURSE HEADERS_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Include/*.hpp")
+file(GLOB_RECURSE SOURCES_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/Src/*.cpp")
 add_executable(${PROJECT_NAME} main.cpp ${SOURCES_FILES})
+target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra)
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_compile_definitions(${PROJECT_NAME} PRIVATE 
-        RELLX_DEBUG_LOGING
+        RELLX_DEBUG_LOGGING
     )
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    target_compile_definitions(${PROJECT_NAME} PRIVATE 
+        -O3
+        NDEBUG
+    )
+
 endif()
 
-target_precompile_headers(${PROJECT_NAME} PUBLIC ${HEADERS_FILES})
+target_precompile_headers(${PROJECT_NAME} PRIVATE "Include/RellXLib.hpp")
 target_link_options(${PROJECT_NAME} PRIVATE -static -static-libgcc)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE 

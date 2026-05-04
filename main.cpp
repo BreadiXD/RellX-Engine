@@ -5,17 +5,18 @@ int main(int argc,char* argv[]){
     gameloop->Initalize();
 
     Rellx::Servers::DisplayServer* displayServer = gameloop->GetDisplayServer();
-    Rellx::Servers::WindowInstance* window = displayServer->Window_CreateWindowInstance();
+    Rellx::Servers::WindowInstance* window = displayServer->CreateWindowInstance();
     Rellx::Variants::Vector2i size(800,600);
-    displayServer->Window_SetWindowSize(window,size);
-    displayServer->Window_SpwanWindow(window);
+    displayServer->SetWindowSize(window,size);
+    displayServer->SpawnWindow(window);
     while (gameloop->IsRunning()){
         gameloop->Update();
         // Custom Logic Here
-        if (displayServer->Window_WindowShouldClose(window)){
-            gameloop->Quite();
+        if (displayServer->WindowShouldClose(window)){
+            gameloop->Quit();
         };
     };
     gameloop->CleanUp();
+    Rellx::DestroyGameLoopInstance(gameloop);
     return 0;
 }

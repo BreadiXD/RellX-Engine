@@ -15,7 +15,7 @@ namespace Rellx{
             //Rellx::Error Update();
             void Update();
             void CleanUp();
-            void Quite();
+            void Quit();
             bool IsRunning() const;
             Rellx::Servers::DisplayServer* GetDisplayServer();
 
