@@ -29,12 +29,24 @@ if(NOT EXISTS "${BIN_PATH}")
     file(MAKE_DIRECTORY "${BIN_PATH}")
 endif()
 set(EXECUTABLE_OUTPUT_PATH "${BIN_PATH}")
-add_executable(${PROJECT_NAME} main.cpp)
+
+
+file(GLOB_RECURSE SOURCES_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Src/*.cpp")
+file(GLOB_RECURSE HEADERS_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Include/*.hpp")
+add_executable(${PROJECT_NAME} main.cpp ${SOURCES_FILES})
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_definitions(${PROJECT_NAME} PRIVATE 
+        RELLX_DEBUG_LOGING
+    )
+endif()
+
+target_precompile_headers(${PROJECT_NAME} PUBLIC ${HEADERS_FILES})
+target_link_options(${PROJECT_NAME} PRIVATE -static -static-libgcc)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE 
     SDL3-static
 )
 target_include_directories(${PROJECT_NAME} PRIVATE 
     "${SDL3_PATH}/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Include"
 )
-target_link_options(${PROJECT_NAME} PRIVATE -static -static-libgcc)

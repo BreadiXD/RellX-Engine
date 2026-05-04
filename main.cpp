@@ -1,37 +1,21 @@
-#include <iostream>
-#include "SDL3/SDL.h"
-#include "SDL3/SDL_main.h"
+#include "iostream"
+#include "RellXLib.hpp"
 int main(int argc,char* argv[]){
-    // Initalize SDL
-    if (!SDL_Init(SDL_INIT_VIDEO)){
-        std::cout << "Error Initalize Video !!!" << std::endl;
-        return 1;
-    }
-    std::cout << "Video Initalized !" << std::endl;
-    // Creating Window
-    SDL_Window* window = SDL_CreateWindow("Hello SDL !!!",800,600,0);
-    if (!window){
-        std::cout << "Error Creating Window !!!" << std::endl;
-        return 1;
-    };
-    std::cout << "Window Created !" << std::endl;
+    Rellx::GameLoop* gameloop = Rellx::CreateGameLoopInstance();
+    gameloop->Initalize();
 
-    // Game Loop
-    bool running = true;
-    SDL_Event event;
-    std::cout << "Start GameLoop !" << std::endl;
-
-    while(running){
-        while(SDL_PollEvent(&event)){
-            if (event.type == SDL_EVENT_QUIT){
-                running = false;
-            };
+    Rellx::Servers::DisplayServer* displayServer = gameloop->GetDisplayServer();
+    Rellx::Servers::WindowInstance* window = displayServer->Window_CreateWindowInstance();
+    Rellx::Variants::Vector2i size(800,600);
+    displayServer->Window_SetWindowSize(window,size);
+    displayServer->Window_SpwanWindow(window);
+    while (gameloop->IsRunning()){
+        gameloop->Update();
+        // Custom Logic Here
+        if (displayServer->Window_WindowShouldClose(window)){
+            gameloop->Quite();
         };
     };
-    // Clean Up
-    std::cout << "Clean Up !" << std::endl;
-
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    gameloop->CleanUp();
     return 0;
 }
