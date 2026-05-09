@@ -50,6 +50,8 @@ namespace Rellx{
     
     // Memory Operation
     namespace Memory{
+        void Initialize();
+        void CleanUp();
         void* Alloc(Rellx::Types::Uint64 size);
         template <typename T>
         T* New(){

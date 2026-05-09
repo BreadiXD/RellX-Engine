@@ -1,6 +1,7 @@
 #include "RellXLib.hpp"
+#include "string"
 int main(int argc,char* argv[]){
-    
+    Rellx::Initialize();
     Rellx::GameLoop* gameloop = Rellx::CreateGameLoopInstance();
     gameloop->Initialize();
     Rellx::Servers::DisplayServer* displayServer = gameloop->GetDisplayServer();
@@ -17,5 +18,6 @@ int main(int argc,char* argv[]){
     };
     gameloop->CleanUp();
     Rellx::DestroyGameLoopInstance(gameloop);
+    Rellx::CleanUp();
     return 0;
 }

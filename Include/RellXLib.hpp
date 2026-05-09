@@ -12,6 +12,9 @@
 
 #include "Servers/DisplayServer.hpp"
 namespace Rellx{
+    void Initialize();
+    void CleanUp();
+
     Rellx::GameLoop* CreateGameLoopInstance();
     void DestroyGameLoopInstance(Rellx::GameLoop* gameloop);
     

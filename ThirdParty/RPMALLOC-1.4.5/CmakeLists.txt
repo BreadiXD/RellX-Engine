@@ -1,0 +1,3 @@
+project(rpmalloc)
+add_library(${PROJECT_NAME} STATIC "rpmalloc/rpmalloc.c")
+target_include_directories(${PROJECT_NAME} PRIVATE "rpmalloc")

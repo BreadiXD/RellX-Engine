@@ -5,6 +5,13 @@
 //    class Rellx::GameLoop;
 //};
 namespace Rellx{
+    void Initialize(){
+        Memory::Initialize();
+    };
+    void CleanUp(){
+        Memory::CleanUp();
+    };
+
     Rellx::GameLoop* CreateGameLoopInstance(){
         RELLX_LOG("RellXLib v%s - %s",RELLX_LIB_VERSION_STRING,RELLX_LIB_VERSION_STATUS)
         return Rellx::Memory::New<Rellx::GameLoop>();

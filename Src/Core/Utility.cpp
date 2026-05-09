@@ -1,13 +1,20 @@
 #include "Core/Utility.hpp"
 #include "SDL3/SDL.h"
+#include "rpmalloc.h"
 #include <cstdarg>
 namespace Rellx{
     namespace Memory{
+        void Initialize(){
+            rpmalloc_initialize();
+        };
+        void CleanUp(){
+            rpmalloc_finalize();
+        };
         void* Alloc(Rellx::Types::Uint64 size){
-            return SDL_malloc(size);
+            return rpmalloc(size);
         };
         void Delete(void* ptr){
-            SDL_free(ptr);
+            rpfree(ptr);
         };
     };
 

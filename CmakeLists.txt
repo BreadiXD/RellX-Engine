@@ -25,6 +25,11 @@ set(GLM_ENABLE_CXX_17 ON CACHE BOOL "Enable GLM GLM_ENABLE_CXX_17" FORCE)
 set(GLM_ENABLE_SIMD_SSE3 ON CACHE BOOL "Enable GLM GLM_ENABLE_SIMD_SSE3" FORCE)
 
 add_subdirectory(${GLM_PATH})
+# Rpmalloc
+set(RPMALLOC_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/RPMALLOC-1.4.5")
+
+add_subdirectory(${RPMALLOC_PATH})
+
 
 
 
@@ -55,8 +60,10 @@ target_link_options(${PROJECT_NAME} PRIVATE -static -static-libgcc)
 target_link_libraries(${PROJECT_NAME} PRIVATE 
     SDL3-static
     glm
+    rpmalloc
 )
 target_include_directories(${PROJECT_NAME} PRIVATE 
+    "${RPMALLOC_PATH}/rpmalloc"
     "${GLM_PATH}/GLM-1.0.3"
     "${SDL3_PATH}/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/Include"
