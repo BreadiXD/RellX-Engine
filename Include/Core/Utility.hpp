@@ -12,8 +12,8 @@ namespace Rellx{
 
 
 #ifdef RELLX_DEBUG_LOGGING
-#define RELLX_LOG(...) Rellx::Loging::Log(__VA_ARGS__);
-#define RELLX_LOG_ERROR(...) Rellx::Loging::Error(__VA_ARGS__);
+#define RELLX_LOG(...) Rellx::Logging::Log(__VA_ARGS__);
+#define RELLX_LOG_ERROR(...) Rellx::Logging::Error(__VA_ARGS__);
 #else
 #define RELLX_LOG(...)
 #define RELLX_LOG_ERROR(...)
@@ -60,7 +60,7 @@ namespace Rellx{
     // Errors Handling
     enum class Error{OK,PROGRAM_CLOSED};
     // Loging
-    namespace Loging{
+    namespace Logging{
         void Log(const char* fmt,...);
         void Error(const char* fmt,...);
 

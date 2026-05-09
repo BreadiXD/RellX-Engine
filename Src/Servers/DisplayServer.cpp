@@ -64,32 +64,47 @@ namespace Rellx{
             return ptr;
         };
         void Rellx::Servers::DisplayServer::DestroyWindowInstance(Rellx::Servers::WindowInstance* instance){
-            if (instance){
-                if (instance->window)SDL_DestroyWindow(instance->window);
-                windows[instance->ID] = nullptr;
-                Rellx::Memory::Delete(instance);
+            if (!instance){
+                RELLX_LOG_ERROR("Window Instance Is Invalid!!!")
+                return;
             };
+            if (instance->window)SDL_DestroyWindow(instance->window);
+            windows[instance->ID] = nullptr;
+            Rellx::Memory::Delete(instance);
         };
         void Rellx::Servers::DisplayServer::SetWindowSize(Rellx::Servers::WindowInstance* instance,const Rellx::Variants::Vector2i& size){
-            if (instance){
-                instance->size = size;
+            if (!instance){
+                RELLX_LOG_ERROR("Window Instance Is Invalid!!!")
+                return;
             };
+            instance->size = size;
         };
         Rellx::Variants::Vector2i Rellx::Servers::DisplayServer::GetWindowSize(Rellx::Servers::WindowInstance* instance) const {
-            if (instance)return instance->size;
-            return Rellx::Variants::Vector2i(0,0);
+            if (!instance){
+                RELLX_LOG_ERROR("Window Instance Is Invalid!!!")
+                return Rellx::Variants::Vector2i(0,0);
+            };
+            return instance->size;
         };
         void Rellx::Servers::DisplayServer::SpawnWindow(Rellx::Servers::WindowInstance* instance){
+            if (!instance){
+                RELLX_LOG_ERROR("Window Instance Is Invalid!!!")
+                return;
+            };
             instance->window = SDL_CreateWindow("",instance->size.x,instance->size.y,0);
             if (instance->window){
                 instance->shouldClose = false;
-                RELLX_LOG("Spawn Winodw ID %d",instance->ID)
+                RELLX_LOG("Spawn Window ID %d",instance->ID)
             }else{
-                RELLX_LOG_ERROR("Cant Spawn Winodw ID %d",instance->ID)
+                RELLX_LOG_ERROR("Cant Spawn Window ID %d",instance->ID)
                 RELLX_LOG_ERROR(SDL_GetError())
             };
         };
         bool Rellx::Servers::DisplayServer::WindowShouldClose(Rellx::Servers::WindowInstance* instance) const {
+            if (!instance){
+                RELLX_LOG_ERROR("Window Instance Is Invalid!!!")
+                return false;
+            };
             return instance->shouldClose;
         };
     };
