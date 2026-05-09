@@ -19,6 +19,12 @@ set(SDL_CAMERA OFF CACHE BOOL "Stop SDL_CAMERA" FORCE)
 set(SDL_SENSOR OFF CACHE BOOL "Stop SDL_SENSOR" FORCE)
 
 add_subdirectory(${SDL3_PATH})
+# GLM
+set(GLM_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/GLM-1.0.3")
+set(GLM_ENABLE_CXX_17 ON CACHE BOOL "Enable GLM GLM_ENABLE_CXX_17" FORCE)
+set(GLM_ENABLE_SIMD_SSE3 ON CACHE BOOL "Enable GLM GLM_ENABLE_SIMD_SSE3" FORCE)
+
+add_subdirectory(${GLM_PATH})
 
 
 
@@ -48,8 +54,10 @@ target_link_options(${PROJECT_NAME} PRIVATE -static -static-libgcc)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE 
     SDL3-static
+    glm
 )
 target_include_directories(${PROJECT_NAME} PRIVATE 
+    "${GLM_PATH}/GLM-1.0.3"
     "${SDL3_PATH}/include"
     "${CMAKE_CURRENT_SOURCE_DIR}/Include"
 )
