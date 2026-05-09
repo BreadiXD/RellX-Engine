@@ -12,7 +12,7 @@ namespace Rellx{
                 WindowInstance* windows[MAX_WINDOWS] = {};
                 DisplayServerData* data = nullptr;
             public:
-                void Initalize(); // Initalize Function
+                void Initialize(); // Initialize Function
                 void Update(); // Update Function
                 void CleanUp(); // CleanUp
                 Rellx::Servers::WindowInstance *CreateWindowInstance(); // Create A Window Instance

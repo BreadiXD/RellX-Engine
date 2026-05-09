@@ -10,10 +10,10 @@ namespace Rellx{
 };
 
 namespace Rellx{
-    void Rellx::GameLoop::Initalize(){
-        RELLX_LOG("GameLoop Initalizing...")
-        displayServer.Initalize();
-        RELLX_LOG("GameLoop Initalized!")
+    void Rellx::GameLoop::Initialize(){
+        RELLX_LOG("GameLoop Initializing...")
+        displayServer.Initialize();
+        RELLX_LOG("GameLoop Initialized!")
         running = true;
     };
     void Rellx::GameLoop::Update(){

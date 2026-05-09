@@ -12,14 +12,14 @@ namespace Rellx{
         struct DisplayServerData{
             SDL_Event event;
         };
-        void Rellx::Servers::DisplayServer::Initalize(){
-            RELLX_LOG("Display Server Initalizing...")
+        void Rellx::Servers::DisplayServer::Initialize(){
+            RELLX_LOG("Display Server Initializing...")
             if (SDL_InitSubSystem(SDL_INIT_VIDEO)){
                 for (Rellx::Types::Int32 i = 0; i < MAX_WINDOWS; i++)windows[i] = nullptr;
                 data = Rellx::Memory::New<Rellx::Servers::DisplayServerData>();
-                RELLX_LOG("Display Server Initalized")
+                RELLX_LOG("Display Server Initialized")
             }else{
-                RELLX_LOG_ERROR("Error Initalize DisplayServer!")
+                RELLX_LOG_ERROR("Error Initialize DisplayServer!")
                 RELLX_LOG_ERROR(SDL_GetError())
             };
         };
@@ -47,7 +47,7 @@ namespace Rellx{
             RELLX_LOG("Display Server CleanUp Completed!")
         };
         Rellx::Servers::WindowInstance* Rellx::Servers::DisplayServer::CreateWindowInstance(){
-            Rellx::Servers::WindowInstance* ptr;
+            Rellx::Servers::WindowInstance* ptr = nullptr;
             for (Rellx::Types::Int32 i = 0; i < MAX_WINDOWS; i++){
                 if (windows[i])continue;
                 ptr = Rellx::Memory::New<Rellx::Servers::WindowInstance>();
@@ -76,7 +76,8 @@ namespace Rellx{
             };
         };
         Rellx::Variants::Vector2i Rellx::Servers::DisplayServer::GetWindowSize(Rellx::Servers::WindowInstance* instance) const {
-            return instance->size;
+            if (instance)return instance->size;
+            return Rellx::Variants::Vector2i(0,0);
         };
         void Rellx::Servers::DisplayServer::SpawnWindow(Rellx::Servers::WindowInstance* instance){
             instance->window = SDL_CreateWindow("",instance->size.x,instance->size.y,0);

@@ -9,9 +9,9 @@ namespace Rellx{
     class GameLoop{
         private:
             Rellx::Servers::DisplayServer displayServer;
-            bool running;
+            bool running = false;
         public:
-            void Initalize();
+            void Initialize();
             //Rellx::Error Update();
             void Update();
             void CleanUp();

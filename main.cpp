@@ -1,9 +1,8 @@
-#include "iostream"
 #include "RellXLib.hpp"
 int main(int argc,char* argv[]){
+    
     Rellx::GameLoop* gameloop = Rellx::CreateGameLoopInstance();
-    gameloop->Initalize();
-
+    gameloop->Initialize();
     Rellx::Servers::DisplayServer* displayServer = gameloop->GetDisplayServer();
     Rellx::Servers::WindowInstance* window = displayServer->CreateWindowInstance();
     Rellx::Variants::Vector2i size(800,600);

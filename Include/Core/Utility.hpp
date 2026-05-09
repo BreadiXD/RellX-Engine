@@ -40,10 +40,6 @@ namespace Rellx{
         #endif
         using Uint8 = unsigned char;
         using Uint16 = unsigned short;
-        using Int8 = signed char;
-        using Int16 = short;
-        using Uint8 = unsigned char;
-        using Uint16 = unsigned short;
         using Uint32 = unsigned int;
         using Uint64 = unsigned long long;
         using Int8 = signed char;
