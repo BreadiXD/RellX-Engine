@@ -1,15 +1,18 @@
 #include "RellXLib.hpp"
 #include "Core/Utility.hpp"
 #include "Core/GameLoop.hpp"
+#include "SDL3/SDL.h"
 //namespace Rellx{
 //    class Rellx::GameLoop;
 //};
 namespace Rellx{
     void Initialize(){
         Memory::Initialize();
+        SDL_Init(SDL_INIT_VIDEO);
     };
     void CleanUp(){
         Memory::CleanUp();
+        SDL_Quit();
     };
 
     Rellx::GameLoop* CreateGameLoopInstance(){

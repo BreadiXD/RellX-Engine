@@ -16,6 +16,8 @@ namespace Rellx{
         void Delete(void* ptr){
             rpfree(ptr);
         };
+
+        
     };
 
     namespace Logging{

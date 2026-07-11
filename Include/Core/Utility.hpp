@@ -1,16 +1,6 @@
 #pragma once
-
+#include <new>
 // All Utility Function And Types To Use In General 
-
-namespace Rellx{
-    namespace Loging{
-        void Log(const char* fmt,...);
-        void Error(const char* fmt,...);
-    };
-};
-
-
-
 #ifdef RELLX_DEBUG_LOGGING
 #define RELLX_LOG(...) Rellx::Logging::Log(__VA_ARGS__);
 #define RELLX_LOG_ERROR(...) Rellx::Logging::Error(__VA_ARGS__);
@@ -55,17 +45,19 @@ namespace Rellx{
         void* Alloc(Rellx::Types::Uint64 size);
         template <typename T>
         T* New(){
-            return static_cast<T*>(Rellx::Memory::Alloc(sizeof(T)));
+            void* ptr = Rellx::Memory::Alloc(sizeof(T));
+            if (!ptr) return nullptr;
+            return ::new (ptr) T();
         };
         void Delete(void* ptr);
     };
     // Errors Handling
-    enum class Error{OK,PROGRAM_CLOSED};
+    enum class Error{OK,FAILED};
+    // Graphics API
+    enum class GraphicsAPIS{NONE,OPENGL33};
     // Loging
     namespace Logging{
         void Log(const char* fmt,...);
         void Error(const char* fmt,...);
-
-        
     };
 };

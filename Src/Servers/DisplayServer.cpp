@@ -3,39 +3,46 @@
 #include "SDL3/SDL.h"
 namespace Rellx{
     namespace Servers{
+        struct DisplayServerData{
+            SDL_Event event;
+        };
         struct WindowInstance{
+            WindowHandler* windowHanlder = nullptr;
             SDL_Window* window = nullptr;
             Rellx::Types::Int32 ID = 0;
             Rellx::Variants::Vector2i size;
             bool shouldClose = false;
         };
-        struct DisplayServerData{
-            SDL_Event event;
-        };
         void Rellx::Servers::DisplayServer::Initialize(){
             RELLX_LOG("Display Server Initializing...")
-            if (SDL_InitSubSystem(SDL_INIT_VIDEO)){
-                for (Rellx::Types::Int32 i = 0; i < MAX_WINDOWS; i++)windows[i] = nullptr;
-                data = Rellx::Memory::New<Rellx::Servers::DisplayServerData>();
-                RELLX_LOG("Display Server Initialized")
-            }else{
-                RELLX_LOG_ERROR("Error Initialize DisplayServer!")
-                RELLX_LOG_ERROR(SDL_GetError())
-            };
+            for (Rellx::Types::Int32 i = 0; i < MAX_WINDOWS; i++)windows[i] = nullptr;
+            data = Rellx::Memory::New<Rellx::Servers::DisplayServerData>();
+            RELLX_LOG("Display Server Initialized")
         };
-        void Rellx::Servers::DisplayServer::Update(){
+        void Rellx::Servers::DisplayServer::BeginFrame(){
             while(SDL_PollEvent(&data->event)){
                 if (data->event.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED){
                     for (Rellx::Types::Int32 i = 0; i < MAX_WINDOWS; i++){
                         if (!windows[i])continue;
                         if (SDL_GetWindowID(windows[i]->window) == data->event.window.windowID){
-                            RELLX_LOG("Window Should Close ID %d",i)
                             windows[i]->shouldClose = true;                        
+                            RELLX_LOG("Window Should Close ID %d",i)
                         };    
                     };
-                    break;
+                } else if (data->event.type == SDL_EVENT_WINDOW_RESIZED){
+                    for (Rellx::Types::Int32 i = 0; i < MAX_WINDOWS; i++){
+                        if (!windows[i])continue;
+                        if (SDL_GetWindowID(windows[i]->window) == data->event.window.windowID){
+                            windows[i]->size.x = data->event.window.data1;
+                            windows[i]->size.y = data->event.window.data2;
+                            RELLX_LOG("Window ID %d Resized %dx%d",i,windows[i]->size.x,windows[i]->size.y)
+                        };
+                    };
                 };
             };
+        };
+        void Rellx::Servers::DisplayServer::EndFrame(){
+            
         };
         void Rellx::Servers::DisplayServer::CleanUp(){
             RELLX_LOG("Display Server CleanUp...")
@@ -43,15 +50,15 @@ namespace Rellx{
                 if (windows[i]) DestroyWindowInstance(windows[i]);
             };
             Rellx::Memory::Delete(data);
-            SDL_QuitSubSystem(SDL_INIT_VIDEO);
             RELLX_LOG("Display Server CleanUp Completed!")
         };
-        Rellx::Servers::WindowInstance* Rellx::Servers::DisplayServer::CreateWindowInstance(){
+        Rellx::Servers::WindowInstance* Rellx::Servers::DisplayServer::CreateWindowInstance() {
             Rellx::Servers::WindowInstance* ptr = nullptr;
             for (Rellx::Types::Int32 i = 0; i < MAX_WINDOWS; i++){
                 if (windows[i])continue;
                 ptr = Rellx::Memory::New<Rellx::Servers::WindowInstance>();
                 if (ptr){
+                    ptr->windowHanlder = Rellx::Memory::New<Rellx::Servers::WindowHandler>();
                     ptr->ID = i;
                     windows[i] = ptr;
                 };
@@ -70,6 +77,8 @@ namespace Rellx{
             };
             if (instance->window)SDL_DestroyWindow(instance->window);
             windows[instance->ID] = nullptr;
+            RELLX_LOG("Destroy Window Instance ID %d",instance->ID)
+            Rellx::Memory::Delete(instance->windowHanlder);
             Rellx::Memory::Delete(instance);
         };
         void Rellx::Servers::DisplayServer::SetWindowSize(Rellx::Servers::WindowInstance* instance,const Rellx::Variants::Vector2i& size){
@@ -91,8 +100,10 @@ namespace Rellx{
                 RELLX_LOG_ERROR("Window Instance Is Invalid!!!")
                 return;
             };
-            instance->window = SDL_CreateWindow("",instance->size.x,instance->size.y,0);
+            instance->window = SDL_CreateWindow("RellX",instance->size.x,instance->size.y,SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
             if (instance->window){
+                SDL_SetWindowPosition(instance->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
+                instance->windowHanlder->ptr = static_cast<void*>(instance->window);
                 instance->shouldClose = false;
                 RELLX_LOG("Spawn Window ID %d",instance->ID)
             }else{
@@ -106,6 +117,10 @@ namespace Rellx{
                 return false;
             };
             return instance->shouldClose;
+        };
+        WindowHandler* Rellx::Servers::DisplayServer::GetWindowHandler(Rellx::Servers::WindowInstance* instance) const{
+            if (instance) return instance->windowHanlder;
+            return nullptr;
         };
     };
 };
