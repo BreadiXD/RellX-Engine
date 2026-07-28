@@ -8,13 +8,14 @@ namespace Rellx{
     namespace Servers{
         class DisplayServer;
         class RenderingServer;
+        class InputServer;
+        class EditorServer;
     };  
 };
 namespace Rellx{
     class GameLoop{
         private:
-            
-            double deltaTime = 0.0;
+            Rellx::Types::Reel deltaTime = 0.0f;
             Rellx::Types::Uint64 frameCount = 0u;
             Rellx::Types::Uint64 frameStartTime = 0u;
             Rellx::Types::Uint64 frameEndTime = 0u;
@@ -23,9 +24,13 @@ namespace Rellx{
             Rellx::Types::Uint64 targetFrameNS = 0;
             Rellx::Servers::DisplayServer* displayServer = nullptr;
             Rellx::Servers::RenderingServer* renderingServer = nullptr;
+            Rellx::Servers::InputServer* inputServer = nullptr;
+            #ifdef RELLX_EDITOR
+            Rellx::Servers::EditorServer* editorServer = nullptr;
+            #endif
             Rellx::Types::Uint64 Fps = 30;
             bool running = false;
-            Rellx::GraphicsAPIS graphicsAPI;
+            Rellx::GraphicsAPIS graphicsAPI = Rellx::GraphicsAPIS::NONE;
         public:
             void Initialize();
             void BeginFrame();
@@ -36,13 +41,19 @@ namespace Rellx{
 
             void SetFps(Rellx::Types::Uint64 fps) noexcept;
             Rellx::Types::Uint64 GetFps() const noexcept;
+            void SetVsyncMode(Rellx::VsyncsModes mode) noexcept;
+            Rellx::VsyncsModes GetVsyncMode() const noexcept;
             void SetGraphicsAPI(Rellx::GraphicsAPIS api) noexcept;
             Rellx::GraphicsAPIS GetGraphicsAPI() const noexcept;
 
-            double GetDelta() const noexcept;
+            Rellx::Types::Reel GetDelta() const noexcept;
             Rellx::Types::Uint64 GetFrameCount() const noexcept;
             Rellx::Servers::DisplayServer* GetDisplayServer() const;
             Rellx::Servers::RenderingServer* GetRenderingServer() const;
+            Rellx::Servers::InputServer* GetInputServer() const;
+            #ifdef RELLX_EDITOR
+            Rellx::Servers::EditorServer* GetEditorServer() const;
+            #endif
 
     };    
 };

@@ -13,6 +13,8 @@ namespace Rellx{
                 WindowInstance* windows[MAX_WINDOWS] = {};
                 DisplayServerData* data = nullptr;
                 Rellx::GameLoop* gameloop = nullptr;
+                Rellx::VsyncsModes vsyncMode = Rellx::VsyncsModes::OFF;
+
                 void Initialize(); // Initialize Function
                 void BeginFrame();
                 void EndFrame();
@@ -20,8 +22,16 @@ namespace Rellx{
             public:
                 Rellx::Servers::WindowInstance *CreateWindowInstance(); // Create A Window Instance
                 void DestroyWindowInstance(Rellx::Servers::WindowInstance* instance); // Destroy Window Instance
-                void SetWindowSize(Rellx::Servers::WindowInstance* instance,const Rellx::Variants::Vector2i& size); // Change Window Size
-                Rellx::Variants::Vector2i GetWindowSize(Rellx::Servers::WindowInstance* instance) const; // Get Window Size
+
+                void SetWindowTitle(Rellx::Servers::WindowInstance* instance,const Rellx::String& title); // Change Window Title
+                Rellx::String GetWindowTitle(Rellx::Servers::WindowInstance* instance) const; // Get Window Title
+
+                void SetWindowSize(Rellx::Servers::WindowInstance* instance,const Rellx::Vector2i& size); // Change Window Size
+                Rellx::Vector2i GetWindowSize(Rellx::Servers::WindowInstance* instance) const; // Get Window Size
+                
+                void SetVsyncMode(Rellx::VsyncsModes mode) noexcept;
+                Rellx::VsyncsModes GetVsyncMode() const noexcept;
+
                 void SpawnWindow(Rellx::Servers::WindowInstance* instance); // Create Window
                 bool WindowShouldClose(Rellx::Servers::WindowInstance* instance) const;
                 WindowHandler* GetWindowHandler(Rellx::Servers::WindowInstance* instance) const;

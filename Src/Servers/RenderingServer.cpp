@@ -85,13 +85,18 @@ namespace Rellx{
             renderer->AttachContextToWindow(context->context,displayServer->GetWindowHandler(window));
             RELLX_LOG("Attach Rendering Context ID %d",context->context->ID)
         };
-        void Rellx::Servers::RenderingServer::SetBackGroundColor(const Rellx::Variants::Color& color) {
+        void Rellx::Servers::RenderingServer::SetBackGroundColor(const Rellx::Color& color) {
             backgroundColor = color;
             if (renderer)renderer->SetBackGroundColor(backgroundColor);
         };
-        Rellx::Variants::Color Rellx::Servers::RenderingServer::GetBackGroundColor() const {
+        Rellx::Color Rellx::Servers::RenderingServer::GetBackGroundColor() const {
             return backgroundColor;
         };
+        Rellx::Servers::ContextHandler* Rellx::Servers::RenderingServer::GetContextHandler(Rellx::Servers::RenderingContext* context) const{
+            if (renderer) return renderer->GetContextHandler(context->context);
+            return nullptr;
+        };
+
 
     };
 };

@@ -1,6 +1,7 @@
 #include "RellXLib.hpp"
 #include "Core/Utility.hpp"
 #include "Core/GameLoop.hpp"
+#include "Core/FileSystem.hpp"
 #include "SDL3/SDL.h"
 //namespace Rellx{
 //    class Rellx::GameLoop;
@@ -9,6 +10,7 @@ namespace Rellx{
     void Initialize(){
         Memory::Initialize();
         SDL_Init(SDL_INIT_VIDEO);
+        FileSystem::Initialize();
     };
     void CleanUp(){
         Memory::CleanUp();

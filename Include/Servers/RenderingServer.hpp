@@ -8,11 +8,13 @@ namespace Rellx{
 };
 namespace Rellx{
     namespace Servers{
-        typedef struct RenderingContext;
+        struct RenderingContext;
+        struct ContextHandler{void* ptr;};
+
         constexpr Rellx::Types::Int32 MAX_CONTEXTS = 16;
         class RenderingServer{
             private:
-                Rellx::Variants::Color backgroundColor = Rellx::Variants::Color(1.0f);
+                Rellx::Color backgroundColor = Rellx::Color(1.0f);
                 RenderingContext* contexts[MAX_CONTEXTS] = {};
                 Rellx::GameLoop* gameloop = nullptr;
                 Rellx::Interfaces::IRenderer* renderer = nullptr;
@@ -29,8 +31,9 @@ namespace Rellx{
                 RenderingContext* CreateRenderingContext();
                 void DestroyRenderingContext(Rellx::Servers::RenderingContext* context);
                 void AttachContextToWindow(Rellx::Servers::RenderingContext* context,Rellx::Servers::WindowInstance* window);
-                void SetBackGroundColor(const Rellx::Variants::Color& color);
-                Rellx::Variants::Color GetBackGroundColor() const;
+                void SetBackGroundColor(const Rellx::Color& color);
+                Rellx::Color GetBackGroundColor() const;
+                ContextHandler* GetContextHandler(Rellx::Servers::RenderingContext* context) const;
             friend class Rellx::GameLoop;
             
         };

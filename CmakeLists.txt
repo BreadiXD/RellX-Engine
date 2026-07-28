@@ -6,6 +6,8 @@ set(CMAKE_C_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+option(RELLX_EDITOR_BUILD "Build As Editor" ON)
+
 # Librarys
 # SDL3
 set(SDL3_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/SDL3-3.4.4")
@@ -34,6 +36,10 @@ add_subdirectory(${RPMALLOC_PATH})
 set(GLAD_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/GLAD")
 add_subdirectory(${GLAD_PATH})
 
+# Imgui
+set(IMGUI_PATH "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty/IMGUI-1.92.8")
+add_subdirectory(${IMGUI_PATH})
+
 
 
 # Output Path
@@ -56,11 +62,17 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
     target_compile_options(${PROJECT_NAME} PRIVATE -O3 -sse3)
 endif()
 
+if (RELLX_EDITOR_BUILD)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC RELLX_EDITOR)
+    message(STATUS "Building Rellx Editor")
+else()
+    message(STATUS "Building Rellx Game")
+endif()
 target_precompile_headers(${PROJECT_NAME} PRIVATE "Include/RellXLib.hpp")
 target_link_options(${PROJECT_NAME} PRIVATE -static -static-libgcc)
-
 target_link_libraries(${PROJECT_NAME} PRIVATE 
     SDL3-static
+    imgui
     glm
     rpmalloc
     glad
@@ -71,5 +83,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     "${RPMALLOC_PATH}/rpmalloc"
     "${GLM_PATH}/GLM-1.0.3"
     "${SDL3_PATH}/include"
+    "${IMGUI_PATH}"
+    "${IMGUI_PATH}/backends"
     "${CMAKE_CURRENT_SOURCE_DIR}/Include"
 )

@@ -13,7 +13,8 @@ namespace Rellx{
         void* Alloc(Rellx::Types::Uint64 size){
             return rpmalloc(size);
         };
-        void Delete(void* ptr){
+        void Free(void* ptr){
+            if (!ptr) return;
             rpfree(ptr);
         };
 

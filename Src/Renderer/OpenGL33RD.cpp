@@ -7,6 +7,7 @@ namespace Rellx{
         struct OpenGL33Context : public Rellx::Interfaces::IRendererContext{
             SDL_Window* window = nullptr;
             SDL_GLContext context;
+            Rellx::Servers::ContextHandler* handler = nullptr;
         };
         void Rellx::Renderer::OpenGL33RD::Initialize(){
             gladLoaded = false;
@@ -15,6 +16,7 @@ namespace Rellx{
             SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,SDL_GL_CONTEXT_PROFILE_CORE);
             SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER,1);
             SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,24);
+            SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE,8);
         };
         
         void Rellx::Renderer::OpenGL33RD::BeginDraw(Rellx::Interfaces::IRendererContext* context,Rellx::Servers::WindowHandler* handler){
@@ -22,7 +24,7 @@ namespace Rellx{
             tempTargetWindow = handler;
             Rellx::Renderer::OpenGL33Context* gl_context = static_cast<Rellx::Renderer::OpenGL33Context*>(context);
             SDL_Window* window = static_cast<SDL_Window*>(handler->ptr);
-            Rellx::Variants::Vector2i windowSize;
+            Rellx::Vector2i windowSize;
             SDL_GL_MakeCurrent(window,gl_context->context);
             SDL_GetWindowSize(window,&windowSize.x,&windowSize.y);
             if (!gladLoaded) return;
@@ -51,7 +53,7 @@ namespace Rellx{
         void Rellx::Renderer::OpenGL33RD::CleanUp(){
 
         };
-        void Rellx::Renderer::OpenGL33RD::SetBackGroundColor(const Rellx::Variants::Color& color) {
+        void Rellx::Renderer::OpenGL33RD::SetBackGroundColor(const Rellx::Color& color) {
             backgroundColor = color;
         };
 
@@ -99,7 +101,14 @@ namespace Rellx{
             };
             gl_context->window = window;
             gl_context->context = glContext;
+            gl_context->handler =  Rellx::Memory::New<Rellx::Servers::ContextHandler>();
+            gl_context->handler->ptr = static_cast<void*>(glContext);
         };
+        Rellx::Servers::ContextHandler* Rellx::Renderer::OpenGL33RD::GetContextHandler(Rellx::Interfaces::IRendererContext* context){
+            Rellx::Renderer::OpenGL33Context* gl_context = static_cast<Rellx::Renderer::OpenGL33Context*>(context);
+            if (gl_context) return gl_context->handler;
+            return nullptr;
 
+        };
     };
 };

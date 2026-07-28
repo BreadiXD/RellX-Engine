@@ -3,6 +3,7 @@
 namespace Rellx{
     namespace Servers{
         struct WindowHandler;
+        struct ContextHandler;
     };
 };
 namespace Rellx{
@@ -21,10 +22,11 @@ namespace Rellx{
                 
                 virtual void CleanUp() = 0;
             public:
-                virtual void SetBackGroundColor(const Rellx::Variants::Color& color) = 0;
+                virtual void SetBackGroundColor(const Rellx::Color& color) = 0;
                 virtual Rellx::Interfaces::IRendererContext* CreateRenderingContext() = 0;
                 virtual void DestroyRenderingContext(Rellx::Interfaces::IRendererContext* context) = 0;
                 virtual void AttachContextToWindow(Rellx::Interfaces::IRendererContext* context,Rellx::Servers::WindowHandler* handler) = 0;
+                virtual Rellx::Servers::ContextHandler* GetContextHandler(Rellx::Interfaces::IRendererContext* context) = 0;
 
             friend class Rellx::Servers::RenderingServer;
         };

@@ -10,7 +10,8 @@ namespace Rellx{
             WindowHandler* windowHanlder = nullptr;
             SDL_Window* window = nullptr;
             Rellx::Types::Int32 ID = 0;
-            Rellx::Variants::Vector2i size;
+            Rellx::Vector2i size = Rellx::Vector2i(640,360);
+            Rellx::String title = "Rellx Engine";
             bool shouldClose = false;
         };
         void Rellx::Servers::DisplayServer::Initialize(){
@@ -21,6 +22,9 @@ namespace Rellx{
         };
         void Rellx::Servers::DisplayServer::BeginFrame(){
             while(SDL_PollEvent(&data->event)){
+                #ifdef RELLX_EDITOR
+                gameloop->GetEditorServer()->ProcesseInput(static_cast<void*>(&data->event));
+                #endif
                 if (data->event.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED){
                     for (Rellx::Types::Int32 i = 0; i < MAX_WINDOWS; i++){
                         if (!windows[i])continue;
@@ -81,26 +85,60 @@ namespace Rellx{
             Rellx::Memory::Delete(instance->windowHanlder);
             Rellx::Memory::Delete(instance);
         };
-        void Rellx::Servers::DisplayServer::SetWindowSize(Rellx::Servers::WindowInstance* instance,const Rellx::Variants::Vector2i& size){
+        void Rellx::Servers::DisplayServer::SetWindowSize(Rellx::Servers::WindowInstance* instance,const Rellx::Vector2i& size){
             if (!instance){
                 RELLX_LOG_ERROR("Window Instance Is Invalid!!!")
                 return;
             };
             instance->size = size;
         };
-        Rellx::Variants::Vector2i Rellx::Servers::DisplayServer::GetWindowSize(Rellx::Servers::WindowInstance* instance) const {
+        Rellx::Vector2i Rellx::Servers::DisplayServer::GetWindowSize(Rellx::Servers::WindowInstance* instance) const {
             if (!instance){
                 RELLX_LOG_ERROR("Window Instance Is Invalid!!!")
-                return Rellx::Variants::Vector2i(0,0);
+                return Rellx::Vector2i(0,0);
             };
             return instance->size;
         };
+
+
+        void Rellx::Servers::DisplayServer::SetWindowTitle(Rellx::Servers::WindowInstance* instance,const Rellx::String& title){
+            if (!instance){
+                RELLX_LOG_ERROR("Window Instance Is Invalid!!!")
+                return;
+            };
+            instance->title = title;
+        };
+        Rellx::String Rellx::Servers::DisplayServer::GetWindowTitle(Rellx::Servers::WindowInstance* instance) const{
+            if (!instance){
+                RELLX_LOG_ERROR("Window Instance Is Invalid!!!")
+                return Rellx::String("");
+            };
+            return instance->title;
+        };
+
+        void Rellx::Servers::DisplayServer::SetVsyncMode(Rellx::VsyncsModes mode) noexcept{
+            vsyncMode = mode;
+            if (vsyncMode == Rellx::VsyncsModes::OFF){
+                SDL_GL_SetSwapInterval(0);
+                RELLX_LOG("Vsync Mode : OFF")
+            }else if (vsyncMode == Rellx::VsyncsModes::ON){
+                SDL_GL_SetSwapInterval(1);
+                RELLX_LOG("Vsync Mode : ON")
+            }else if (vsyncMode == Rellx::VsyncsModes::ADAPTIVE){
+                SDL_GL_SetSwapInterval(-1);
+                RELLX_LOG("Vsync Mode : ADAPTIVE")
+            };
+        };
+        Rellx::VsyncsModes Rellx::Servers::DisplayServer::GetVsyncMode() const noexcept{return vsyncMode;};
+
+        
         void Rellx::Servers::DisplayServer::SpawnWindow(Rellx::Servers::WindowInstance* instance){
             if (!instance){
                 RELLX_LOG_ERROR("Window Instance Is Invalid!!!")
                 return;
             };
-            instance->window = SDL_CreateWindow("RellX",instance->size.x,instance->size.y,SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+            
+            instance->window = SDL_CreateWindow(instance->title.c_str(),instance->size.x,instance->size.y,SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
             if (instance->window){
                 SDL_SetWindowPosition(instance->window,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED);
                 instance->windowHanlder->ptr = static_cast<void*>(instance->window);

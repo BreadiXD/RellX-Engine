@@ -6,16 +6,26 @@
 #define RELLX_LIB_VERSION_STATUS "Dev" // Version Statue : Dev - Alpha - Beta - Stable
 
 
-#include "Core/Variants/Vector2.hpp"
-#include "Core/Variants/Color.hpp"
+#include "Core/Variants.hpp"
 #include "Core/GameLoop.hpp"
 #include "Core/Utility.hpp"
+#include "Core/FileSystem.hpp"
 
 #include "Interfaces/IRenderer.hpp"
 #include "Renderer/OpenGL33RD.hpp"
 
 #include "Servers/DisplayServer.hpp"
 #include "Servers/RenderingServer.hpp"
+#include "Servers/SceneServer.hpp"
+#include "Servers/InputServer.hpp"
+#include "Servers/AssetsServer.hpp"
+
+#ifdef RELLX_EDITOR
+#include "Servers/EditorServer.hpp"
+#endif
+
+
+
 
 
 namespace Rellx{
